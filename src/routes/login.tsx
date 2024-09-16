@@ -1,49 +1,29 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../app/AuthProvider";
+import ErrorsMessages from '../components/ErrorsMessages';
 
 function LoginPage() {
   const [formValues, setFormValues] = useState({
     email: 'john.doe@mail.com',
     password: '123',
     rememberMe: false,
-    errorMessage: ''
+    messages: ['']
   }); 
   const { login } = useAuth();
   const navigate = useNavigate();
   const { state } = useLocation();
 
-  function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setFormValues({
-      ...formValues,
-      email: e.target.value
-    });
-  }
-
-  function handlePasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setFormValues({
-      ...formValues,
-      password: e.target.value
-    });
-  }
-
-  function handleRememberMeChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setFormValues({
-      ...formValues,
-      rememberMe: e.target.checked
-    });
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const loginResult = await login(formValues.email, formValues.password, formValues.rememberMe);
-    if (loginResult.isSuccess) {
+    const result = await login(formValues.email, formValues.password, formValues.rememberMe);
+    if (result.succeeded) {
       navigate(state?.path || "/");
     } else {
       setFormValues({
         ...formValues,
-        errorMessage: loginResult.errorMessage
+        messages: result.messages
       });
     }
   }
@@ -60,10 +40,17 @@ function LoginPage() {
           name="email"
           placeholder="Email"
           required
+          maxLength={256}
           value={formValues.email}
-          onChange={handleEmailChange}
+          onChange={(e) => {
+            setFormValues({
+              ...formValues,
+              email: e.target.value
+            });
+          }}
         />
         <br/>
+
         <label htmlFor="password">Password:</label>
         <br/>
         <input
@@ -73,25 +60,38 @@ function LoginPage() {
           placeholder="Password"
           required
           value={formValues.password}
-          onChange={handlePasswordChange}
+          onChange={(e) => {
+            setFormValues({
+              ...formValues,
+              password: e.target.value
+            });
+          }}
         />
         <br/>
+
         <input 
           type="checkbox" 
           id="rememberMe" 
           name="rememberMe"
           checked={formValues.rememberMe}
-          onChange={handleRememberMeChange}
+          onChange={(e) => {
+            setFormValues({
+              ...formValues,
+              rememberMe: e.target.checked
+            });
+          }}
         />
         <label htmlFor="rememberMe">Remember me</label>
         <br/>
+
         <button type="submit">Log in</button>
       </form>
-      {formValues.errorMessage && (
-        <p className="error">
-          {formValues.errorMessage}
-        </p>
-      )}
+
+      <ErrorsMessages messages={formValues.messages} />
+
+      <p>
+        Do not have an account? <Link to={'/register'}>Please register.</Link>
+      </p>
     </section>
   )
 }

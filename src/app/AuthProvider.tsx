@@ -1,6 +1,7 @@
 import { createContext, useContext, useMemo, useState } from "react";
 import { useCookies } from 'react-cookie';
 import { jwtDecode } from "jwt-decode";
+import { executeFetch } from "./networkUtils";
 
 interface IUser {
   id: string;
@@ -24,14 +25,21 @@ const defaultAuthState: IAuthState = {
   user: null
 }
 
-interface ILoginResult {
-  isSuccess: boolean;
-  errorMessage: string;
+interface IAuthResult {
+  succeeded: boolean;
+  messages: string[];
 }
 
 interface IAuthContext extends IAuthState {
-  login: (email: string, password: string, rememberMe: boolean) => Promise<ILoginResult>;
-  logout: () => void | null;
+  register: (
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string,
+    confirmPassword: string,
+    description: string) => Promise<IAuthResult>;
+  login: (email: string, password: string, rememberMe: boolean) => Promise<IAuthResult>;
+  logout: () => void;
 };
 
 const defaultAuthContext: IAuthContext = {
@@ -39,24 +47,32 @@ const defaultAuthContext: IAuthContext = {
   refreshToken: '',
   isAuthenticated: false,
   user: null,
-  login: async (email: string, password: string, rememberMe: boolean) => { 
-    const delay: number = (email + password + rememberMe.toString()).length;
+  register: async (
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string,
+    confirmPassword: string,
+    description: string
+  ) => { 
     const delayPromise = (ms: number) => new Promise(res => setTimeout(res, ms));
-    await delayPromise(delay);
-
-    const result: ILoginResult = {
-      isSuccess: false,
-      errorMessage: ''
+    await delayPromise(1);
+    const result: IAuthResult = {
+      succeeded: false,
+      messages: []
+    };
+    return result;
+  },
+  login: async (email: string, password: string, rememberMe: boolean) => { 
+    const delayPromise = (ms: number) => new Promise(res => setTimeout(res, ms));
+    await delayPromise(1);
+    const result: IAuthResult = {
+      succeeded: false,
+      messages: []
     };
     return result;
   },
   logout: () => {}
-}
-
-interface IFetchResult {
-  isSuccess: boolean;
-  data: any;
-  errorMessage: string;
 }
 
 const JWT_TOKEN_COOKIE = 'pet-project-jwt-token';
@@ -80,18 +96,51 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setAuthState(newAuthState);
   }
 
-  const login = async (email: string, password: string, rememberMe: boolean): Promise<ILoginResult> => {
-    const result: ILoginResult = {
-      isSuccess: false,
-      errorMessage: ''
+  const register = async (
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string,
+    confirmPassword: string,
+    description: string
+  ): Promise<IAuthResult> => {
+    const env = await import.meta.env;
+    const registerUrl = `${env.VITE_API_BASE_URL}Account/register`;
+
+    const request = new Request(registerUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ firstName, lastName, email, password, confirmPassword, description })
+    });
+    const fetchResult = await executeFetch(request);
+  
+    const result: IAuthResult = {
+      succeeded: fetchResult.succeeded,
+      messages: fetchResult.messages
+    };
+    return result;
+  }
+
+  const login = async (email: string, password: string, rememberMe: boolean): Promise<IAuthResult> => {
+    const result: IAuthResult = {
+      succeeded: false,
+      messages: []
     };
 
     removeCookie(JWT_TOKEN_COOKIE);
     removeCookie(REFRESH_TOKEN_COOKIE);
 
-    const fetchResult = await fetchLogin(email, password);
+    const env = await import.meta.env;
+    const loginUrl = `${env.VITE_API_BASE_URL}Account/authenticate`;
 
-    if (fetchResult.isSuccess) {
+    const request = new Request(loginUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+    const fetchResult = await executeFetch(request);
+
+    if (fetchResult.succeeded) {
       const newAuthState: IAuthState = {
         token: fetchResult.data.jwToken,
         refreshToken: fetchResult.data.refreshToken,
@@ -105,12 +154,12 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setCookie(REFRESH_TOKEN_COOKIE, fetchResult.data.refreshToken);
       }
 
-      result.isSuccess = true;
+      result.succeeded = true;
     }
 
     else {
       setAuthState(defaultAuthState);
-      result.errorMessage = fetchResult.errorMessage;
+      result.messages = fetchResult.messages;
     }
     
     return result;
@@ -129,6 +178,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       refreshToken: authState.refreshToken,
       isAuthenticated: authState.isAuthenticated,
       user: authState.user,
+      register,
       login,
       logout
     }),
@@ -139,44 +189,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };
-
-const fetchLogin = async (email: string, password: string): Promise<IFetchResult> => {
-  const result: IFetchResult = {
-    isSuccess: false,
-    data: null,
-    errorMessage: ''
-  };
-
-  const env = await import.meta.env;
-  const loginUrl = `${env.VITE_API_BASE_URL}Account/authenticate`;
-
-  try {
-    const response = await fetch(loginUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
-    });
-
-    const contentType = response.headers.get("Content-Type");
-    if (!contentType || !contentType.includes("application/json")) {
-      result.errorMessage = `Network error: ${response.status} (${response.statusText})`;
-    }
-    else {
-      const responseBody = await response.json();
-      if (responseBody.succeeded) {
-        result.isSuccess = true;
-        result.data = responseBody.data;
-      }
-      else {
-        result.errorMessage = responseBody.message;
-      }
-    }
-  } catch (error) {
-    result.errorMessage = `Unexpected error: ${error}`;
-  }
-
-  return result;
-}
 
 const parseUserFromToken = (token: string): IUser => {
   const decoded: any = jwtDecode(token);
