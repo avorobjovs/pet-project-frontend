@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 import { useAuth } from "../app/AuthProvider";
 import ErrorsMessages from '../components/ErrorsMessages';
 
 function LoginPage() {
   const [formValues, setFormValues] = useState({
-    email: 'john.doe@mail.com',
-    password: '123',
+    email: '',
+    password: '',
     rememberMe: false,
     messages: ['']
   }); 
   const { login } = useAuth();
   const navigate = useNavigate();
   const { state } = useLocation();
+  const { t } = useTranslation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,15 +32,14 @@ function LoginPage() {
 
   return (
     <section>
-      <h3>Please log in:</h3>
+      <h3>{t('login_to_account')}</h3>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email:</label>
+        <label htmlFor="email">{t('email_address')}</label>
         <br/>
         <input
           type="email"
           id="email"
           name="email"
-          placeholder="Email"
           required
           maxLength={256}
           value={formValues.email}
@@ -51,13 +52,12 @@ function LoginPage() {
         />
         <br/>
 
-        <label htmlFor="password">Password:</label>
+        <label htmlFor="password">{t('password')}</label>
         <br/>
         <input
           type="password"
           id="password"
           name="password"
-          placeholder="Password"
           required
           value={formValues.password}
           onChange={(e) => {
@@ -81,16 +81,16 @@ function LoginPage() {
             });
           }}
         />
-        <label htmlFor="rememberMe">Remember me</label>
+        <label htmlFor="rememberMe">{t('remember_me')}</label>
         <br/>
 
-        <button type="submit">Log in</button>
+        <button type="submit">{t('login')}</button>
       </form>
 
       <ErrorsMessages messages={formValues.messages} />
 
       <p>
-        Do not have an account? <Link to={'/register'}>Please register.</Link>
+        {t('dont_have_account')} <Link to={'/register'}>{t('please_register')}</Link>
       </p>
     </section>
   )

@@ -1,10 +1,12 @@
 import { Route, Routes } from 'react-router-dom'
+import './i18n';
+
 import ProtectedRoutes from './components/ProtectedRoutes'
-import LoginPage from './routes/login'
-import RegisterPage from './routes/register'
-import PageLayout from './routes/layout'
-import AboutPage from './routes/about'
-import Index from './routes'
+import LoginPage from './routes/LoginPage'
+import RegisterPage from './routes/RegisterPage'
+import PageLayout from './routes/PageLayout'
+import AboutPage from './routes/AboutPage'
+import HomePage from './routes/HomePage'
 
 function App() {
   return (
@@ -17,7 +19,7 @@ function App() {
           element={
             <ProtectedRoutes>
               <Route path="/" element={<PageLayout />}>
-                <Route index element={<Index />} />
+                <Route index element={<HomePage />} />
                 <Route path="/about" element={<AboutPage />} />
               </Route>
             </ProtectedRoutes>

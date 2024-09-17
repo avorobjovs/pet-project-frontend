@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../app/AuthProvider';
 import ErrorsMessages from '../components/ErrorsMessages';
 
@@ -19,6 +20,7 @@ function RegisterPage() {
   }); 
 
   const { register } = useAuth();
+  const { t } = useTranslation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,15 +48,14 @@ function RegisterPage() {
 
   return (
     <section>
-      <h3>Register new user:</h3>
+      <h3>{t('register_account')}</h3>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="firstName">First Name:</label>
+        <label htmlFor="firstName">{t('first_name')}</label>
         <br/>
         <input
           type="text"
           id="firstName"
           name="firstName"
-          placeholder="First Name"
           required
           value={formValues.firstName}
           onChange={(e) => {
@@ -66,13 +67,12 @@ function RegisterPage() {
         />
         <br/>
 
-        <label htmlFor="lastName">Last Name:</label>
+        <label htmlFor="lastName">{t('last_name')}</label>
         <br/>
         <input
           type="text"
           id="lastName"
           name="lastName"
-          placeholder="Last Name"
           required
           value={formValues.lastName}
           onChange={(e) => {
@@ -84,13 +84,12 @@ function RegisterPage() {
         />
         <br/>
 
-        <label htmlFor="email">Email:</label>
+        <label htmlFor="email">{t('email_address')}</label>
         <br/>
         <input
           type="email"
           id="email"
           name="email"
-          placeholder="Email"
           required
           maxLength={256}
           value={formValues.email}
@@ -103,13 +102,12 @@ function RegisterPage() {
         />
         <br/>
 
-        <label htmlFor="password">Password:</label>
+        <label htmlFor="password">{t('password')}</label>
         <br/>
         <input
           type="password"
           id="password"
           name="password"
-          placeholder="Password"
           required
           value={formValues.password}
           onChange={(e) => {
@@ -121,13 +119,12 @@ function RegisterPage() {
         />
         <br/>
 
-        <label htmlFor="confirmPassword">Confirm Password:</label>
+        <label htmlFor="confirmPassword">{t('confirm_password')}</label>
         <br/>
         <input
           type="password"
           id="confirmPassword"
           name="confirmPassword"
-          placeholder="Confirm Password"
           required
           value={formValues.confirmPassword}
           onChange={(e) => {
@@ -139,7 +136,7 @@ function RegisterPage() {
         />
         <br/>
 
-        <label htmlFor="description">Description:</label>
+        <label htmlFor="description">{t('description')}</label>
         <br/>
         <textarea 
           id="description"
@@ -154,13 +151,13 @@ function RegisterPage() {
         />
         <br/>
 
-        <button type="submit">Register</button>
+        <button type="submit">{t('register')}</button>
       </form>
 
       <ErrorsMessages messages={formResult.messages} />
 
       <p>
-        Already have an account? <Link to={'/login'}>Please login.</Link>
+        {t('already_have_account')} <Link to={'/login'}>{t('please_login')}</Link>
       </p>
     </section>
   )
