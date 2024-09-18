@@ -55,8 +55,9 @@ const defaultAuthContext: IAuthContext = {
     confirmPassword: string,
     description: string
   ) => { 
+    const delayMs = (firstName + lastName + email + password + confirmPassword + description).length;
     const delayPromise = (ms: number) => new Promise(res => setTimeout(res, ms));
-    await delayPromise(1);
+    await delayPromise(delayMs);
     const result: IAuthResult = {
       succeeded: false,
       messages: []
@@ -64,8 +65,9 @@ const defaultAuthContext: IAuthContext = {
     return result;
   },
   login: async (email: string, password: string, rememberMe: boolean) => { 
+    const delayMs = (email + password + rememberMe.toString()).length;
     const delayPromise = (ms: number) => new Promise(res => setTimeout(res, ms));
-    await delayPromise(1);
+    await delayPromise(delayMs);
     const result: IAuthResult = {
       succeeded: false,
       messages: []
