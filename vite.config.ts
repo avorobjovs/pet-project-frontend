@@ -4,5 +4,5 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/vite-deploy-demo/' // for a deployment to GitHub Pages
+  base: '/pet-project-frontend/' // for a deployment to GitHub Pages
 })
