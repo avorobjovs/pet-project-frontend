@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../app/AuthProvider';
 import ErrorsMessages from '../components/ErrorsMessages';
+import AuthLayout from './AuthLayout';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 function RegisterPage() {
   const [formValues, setFormValues] = useState({
@@ -47,119 +50,112 @@ function RegisterPage() {
   }
 
   return (
-    <section>
-      <h3>{t('register_account')}</h3>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="firstName">{t('first_name')}</label>
-        <br/>
-        <input
-          type="text"
-          id="firstName"
-          name="firstName"
-          required
-          value={formValues.firstName}
-          onChange={(e) => {
-            setFormValues({
-              ...formValues,
-              firstName: e.target.value
-            });
-          }}
-        />
-        <br/>
+    <AuthLayout>
+      <div className="auth-form w-100 m-auto">
+        <h3 className='mb-3'>{t('register_account')}</h3>
 
-        <label htmlFor="lastName">{t('last_name')}</label>
-        <br/>
-        <input
-          type="text"
-          id="lastName"
-          name="lastName"
-          required
-          value={formValues.lastName}
-          onChange={(e) => {
-            setFormValues({
-              ...formValues,
-              lastName: e.target.value
-            });
-          }}
-        />
-        <br/>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3" controlId="firstName">
+            <Form.Label>{t('first_name')}</Form.Label>
+            <Form.Control 
+              type="text"
+              required 
+              value={formValues.firstName}
+              onChange={(e) => {
+                setFormValues({
+                  ...formValues,
+                  firstName: e.target.value
+                });
+              }}
+            />
+          </Form.Group>
 
-        <label htmlFor="email">{t('email_address')}</label>
-        <br/>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          required
-          maxLength={256}
-          value={formValues.email}
-          onChange={(e) => {
-            setFormValues({
-              ...formValues,
-              email: e.target.value
-            });
-          }}
-        />
-        <br/>
+          <Form.Group className="mb-3" controlId="lastName">
+            <Form.Label>{t('last_name')}</Form.Label>
+            <Form.Control 
+              type="text"
+              required 
+              value={formValues.lastName}
+              onChange={(e) => {
+                setFormValues({
+                  ...formValues,
+                  lastName: e.target.value
+                });
+              }}
+            />
+          </Form.Group>
 
-        <label htmlFor="password">{t('password')}</label>
-        <br/>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          required
-          value={formValues.password}
-          onChange={(e) => {
-            setFormValues({
-              ...formValues,
-              password: e.target.value
-            });
-          }}
-        />
-        <br/>
+          <Form.Group className="mb-3" controlId="email">
+            <Form.Label>{t('email_address')}</Form.Label>
+            <Form.Control 
+              type="email"
+              required 
+              maxLength={256}
+              value={formValues.email}
+              onChange={(e) => {
+                setFormValues({
+                  ...formValues,
+                  email: e.target.value
+                });
+              }}
+            />
+          </Form.Group>
 
-        <label htmlFor="confirmPassword">{t('confirm_password')}</label>
-        <br/>
-        <input
-          type="password"
-          id="confirmPassword"
-          name="confirmPassword"
-          required
-          value={formValues.confirmPassword}
-          onChange={(e) => {
-            setFormValues({
-              ...formValues,
-              confirmPassword: e.target.value
-            });
-          }}
-        />
-        <br/>
+          <Form.Group className="mb-3" controlId="password">
+            <Form.Label>{t('password')}</Form.Label>
+            <Form.Control 
+              type="password"
+              required 
+              value={formValues.password}
+              onChange={(e) => {
+                setFormValues({
+                  ...formValues,
+                  password: e.target.value
+                });
+              }}
+            />
+          </Form.Group>
 
-        <label htmlFor="description">{t('description')}</label>
-        <br/>
-        <textarea 
-          id="description"
-          name="description"
-          value={formValues.description}
-          onChange={(e) => {
-            setFormValues({
-              ...formValues,
-              description: e.target.value
-            });
-          }}
-        />
-        <br/>
+          <Form.Group className="mb-3" controlId="confirmPassword">
+            <Form.Label>{t('confirm_password')}</Form.Label>
+            <Form.Control 
+              type="password"
+              required 
+              value={formValues.confirmPassword}
+              onChange={(e) => {
+                setFormValues({
+                  ...formValues,
+                  confirmPassword: e.target.value
+                });
+              }}
+            />
+          </Form.Group>
 
-        <button type="submit">{t('register')}</button>
-      </form>
+          <Form.Group className="mb-4" controlId="description">
+            <Form.Label>{t('description')}</Form.Label>
+            <Form.Control 
+              as="textarea"
+              required 
+              value={formValues.description}
+              onChange={(e) => {
+                setFormValues({
+                  ...formValues,
+                  description: e.target.value
+                });
+              }}
+            />
+          </Form.Group>
 
-      <ErrorsMessages messages={formResult.messages} />
+          <Button variant="primary" type="submit" className="w-100 py-2">{t('register')}</Button>
+        </Form>
 
-      <p>
-        {t('already_have_account')} <Link to={'/login'}>{t('please_login')}</Link>
-      </p>
-    </section>
+        <ErrorsMessages messages={formResult.messages} />
+
+        <p className="mt-4 text-body-secondary text-center">
+          {t('already_have_account')} <Link className="fw-semibold text-decoration-none" to={'/login'}>{t('please_login')}</Link>
+        </p>
+      </div>
+    </AuthLayout>
   )
 }
 

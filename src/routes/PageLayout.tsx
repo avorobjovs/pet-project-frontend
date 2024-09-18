@@ -1,41 +1,14 @@
-import { NavLink, Outlet } from "react-router-dom"
+import { Outlet } from "react-router-dom"
+import NavBar from "../components/NavBar"
 
 function PageLayout() {
   return (
-    <div>
-      <div>
-        <nav>
-          <NavLink
-            to={'/'}
-            className={({ isActive, isPending }) =>
-              isActive
-                ? "active"
-                : isPending
-                ? "pending"
-                : ""
-            }
-          >
-            Main    
-          </NavLink>
-          &nbsp;
-          <NavLink
-            to={'/about'}
-            className={({ isActive, isPending }) =>
-              isActive
-                ? "active"
-                : isPending
-                ? "pending"
-                : ""
-            }
-          >
-            About    
-          </NavLink>
-        </nav>
-      </div>
-      <div>
+    <>
+      <NavBar />
+      <div className="container my-5">
         <Outlet />
       </div>
-    </div>
+    </>
   )
 }
 

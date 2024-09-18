@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router-dom'
-import './i18n';
 
 import ProtectedRoutes from './components/ProtectedRoutes'
 import LoginPage from './routes/LoginPage'
@@ -10,7 +9,7 @@ import HomePage from './routes/HomePage'
 
 function App() {
   return (
-    <div className="App">
+    <>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
@@ -26,7 +25,7 @@ function App() {
           }
         />
       </Routes>
-    </div>
+    </>
   )
 }
 
