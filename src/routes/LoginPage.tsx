@@ -3,6 +3,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { useAuth } from "../app/AuthProvider";
 import ErrorsMessages from '../components/ErrorsMessages';
+import AuthLayout from './AuthLayout';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 function LoginPage() {
   const [formValues, setFormValues] = useState({
@@ -31,68 +34,66 @@ function LoginPage() {
   }
 
   return (
-    <section>
-      <h3>{t('login_to_account')}</h3>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">{t('email_address')}</label>
-        <br/>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          required
-          maxLength={256}
-          value={formValues.email}
-          onChange={(e) => {
-            setFormValues({
-              ...formValues,
-              email: e.target.value
-            });
-          }}
-        />
-        <br/>
+    <AuthLayout>
+      <div className="auth-form w-100 m-auto">
+        <h3 className='mb-3'>{t('login_to_account')}</h3>
 
-        <label htmlFor="password">{t('password')}</label>
-        <br/>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          required
-          value={formValues.password}
-          onChange={(e) => {
-            setFormValues({
-              ...formValues,
-              password: e.target.value
-            });
-          }}
-        />
-        <br/>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3" controlId="email">
+            <Form.Label>{t('email_address')}</Form.Label>
+            <Form.Control 
+              type="email" 
+              required 
+              maxLength={256}
+              value={formValues.email}
+              onChange={(e) => {
+                setFormValues({
+                  ...formValues,
+                  email: e.target.value
+                });
+              }}
+            />
+          </Form.Group>
 
-        <input 
-          type="checkbox" 
-          id="rememberMe" 
-          name="rememberMe"
-          checked={formValues.rememberMe}
-          onChange={(e) => {
-            setFormValues({
-              ...formValues,
-              rememberMe: e.target.checked
-            });
-          }}
-        />
-        <label htmlFor="rememberMe">{t('remember_me')}</label>
-        <br/>
+          <Form.Group className="mb-3" controlId="password">
+            <Form.Label>{t('password')}</Form.Label>
+            <Form.Control 
+              type="password" 
+              required 
+              value={formValues.password}
+              onChange={(e) => {
+                setFormValues({
+                  ...formValues,
+                  password: e.target.value
+                });
+              }}
+            />
+          </Form.Group>
 
-        <button type="submit">{t('login')}</button>
-      </form>
+          <Form.Group className="mb-3" controlId="rememberMe">
+            <Form.Check
+              type="checkbox"
+              label={t('remember_me')}
+              checked={formValues.rememberMe}
+              onChange={(e) => {
+                setFormValues({
+                  ...formValues,
+                  rememberMe: e.target.checked
+                });
+              }}
+            />
+          </Form.Group>
 
-      <ErrorsMessages messages={formValues.messages} />
+          <Button variant="primary" type="submit" className="w-100 py-2">{t('login')}</Button>
+        </Form>
 
-      <p>
-        {t('dont_have_account')} <Link to={'/register'}>{t('please_register')}</Link>
-      </p>
-    </section>
+        <ErrorsMessages messages={formValues.messages} />
+
+        <p className="mt-4 text-body-secondary text-center">
+          {t('dont_have_account')} <Link className="fw-semibold text-decoration-none" to={'/register'}>{t('please_register')}</Link>
+        </p>
+      </div>
+    </AuthLayout>
   )
 }
 

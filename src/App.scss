@@ -1,0 +1,47 @@
+// Import all of Bootstrap's CSS
+@import "bootstrap/scss/bootstrap";
+
+.auth-form {
+  max-width: 330px;
+  padding: 1rem;
+}
+
+.form-label {
+  margin-bottom: 0;
+}
+
+.navbar-brand {
+  padding-bottom: 0.4em;
+}
+
+.nav-link {
+  font-weight: 600;
+}
+
+/*
+// floating label for input in a form group
+// label should be under input
+.form-group-floating-label {
+  position:relative;
+
+  label {
+    padding: 0.275rem 0.65rem;
+    margin: 0.1rem;
+    pointer-events: none;
+    position:absolute;
+    left:0;
+    top:0;
+    transition: 0.2s;
+    transition-timing-function: ease;
+    transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    background: #fff;
+  }
+
+  input:focus + label, input:not(:placeholder-shown) + label {
+    opacity: 1;
+    transform: scale(0.75) translateY(-75%) translateX(0px);
+    padding: 0.3rem;
+    color: var(--bs-tertiary-color);
+  }
+}
+*/
