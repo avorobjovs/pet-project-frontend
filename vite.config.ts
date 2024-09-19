@@ -2,6 +2,7 @@ import { ConfigEnv, defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
+/*
 export default defineConfig(({ command, mode }: ConfigEnv) => {
   if (command === 'build' || mode == 'production') {
     return {
@@ -14,4 +15,10 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
       base: '/development-test/'
     }
   }
+})
+*/
+
+export default defineConfig({
+  plugins: [react()],
+  base: '/pet-project-frontend/'
 })
