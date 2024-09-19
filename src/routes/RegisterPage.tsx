@@ -6,6 +6,7 @@ import ErrorsMessages from '../components/ErrorsMessages';
 import AuthLayout from './AuthLayout';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import AppSpinner from '../components/AppSpinner';
 
 function RegisterPage() {
   const [formValues, setFormValues] = useState({
@@ -22,31 +23,38 @@ function RegisterPage() {
     messages: ['']
   }); 
 
+  const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const { t } = useTranslation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const result = await register(
+    setLoading(true);
+
+    register(
       formValues.firstName,
       formValues.lastName,
       formValues.email,
       formValues.password,
       formValues.confirmPassword,
       formValues.description
-    );
-    if (result.succeeded) {
-      setFormResult({
-        succeeded: true,
-        messages: ['You have successfully registered. Please login.']
+    )
+      .then(result => {
+        setLoading(false);
+        
+        if (result.succeeded) {
+          setFormResult({
+            succeeded: true,
+            messages: ['You have successfully registered. Please login.']
+          });
+        } else {
+          setFormResult({
+            succeeded: false,
+            messages: result.messages
+          });
+        }
       });
-    } else {
-      setFormResult({
-        succeeded: false,
-        messages: result.messages
-      });
-    }
   }
 
   return (
@@ -135,7 +143,6 @@ function RegisterPage() {
             <Form.Label>{t('description')}</Form.Label>
             <Form.Control 
               as="textarea"
-              required 
               value={formValues.description}
               onChange={(e) => {
                 setFormValues({
@@ -155,6 +162,7 @@ function RegisterPage() {
           {t('already_have_account')} <Link className="fw-semibold text-decoration-none" to={'/login'}>{t('please_login')}</Link>
         </p>
       </div>
+      <AppSpinner show={loading} />
     </AuthLayout>
   )
 }
