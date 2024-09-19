@@ -38,10 +38,7 @@ jobs:
         run: npm ci
 
       - name: Build project
-        run: npm run build --base=/pet-project-frontend/
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
+        run: npm run build -- --base=/pet-project-frontend/
 
       - name: Upload GitHub Pages artifacts
         uses: actions/upload-pages-artifact@v3
