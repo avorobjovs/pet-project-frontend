@@ -7,6 +7,7 @@ import AuthLayout from './AuthLayout';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import AppSpinner from '../components/AppSpinner';
+import { setPath } from '../utils/navigationUtils';
 
 function LoginPage() {
   const [formValues, setFormValues] = useState({
@@ -32,7 +33,7 @@ function LoginPage() {
         setLoading(false);
         
         if (result.succeeded) {
-          navigate(state?.path || "/");
+          navigate(state?.path || setPath('/'));
         } else {
           setFormValues({
             ...formValues,
@@ -99,7 +100,7 @@ function LoginPage() {
         <ErrorsMessages messages={formValues.messages} />
 
         <p className="mt-4 text-body-secondary text-center">
-          {t('dont_have_account')} <Link className="fw-semibold text-decoration-none" to={'/register'}>{t('please_register')}</Link>
+          {t('dont_have_account')} <Link className="fw-semibold text-decoration-none" to={setPath('/register')}>{t('please_register')}</Link>
         </p>
       </div>
       <AppSpinner show={loading} />
