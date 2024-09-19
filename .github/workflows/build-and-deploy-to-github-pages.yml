@@ -38,7 +38,7 @@ jobs:
         run: npm ci
 
       - name: Build project
-        run: npm run build -- --base=/pet-project-frontend/
+        run: npm run build
 
       - name: Upload GitHub Pages artifacts
         uses: actions/upload-pages-artifact@v3
