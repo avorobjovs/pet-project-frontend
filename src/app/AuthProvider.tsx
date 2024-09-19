@@ -106,9 +106,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     confirmPassword: string,
     description: string
   ): Promise<IAuthResult> => {
-    const env = await import.meta.env;
-    const registerUrl = `${env.VITE_API_BASE_URL}Account/register`;
-
+    const registerUrl = `${import.meta.env.VITE_API_BASE_URL}Account/register`;
     const request = new Request(registerUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -132,9 +130,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     removeCookie(JWT_TOKEN_COOKIE);
     removeCookie(REFRESH_TOKEN_COOKIE);
 
-    const env = await import.meta.env;
-    const loginUrl = `${env.VITE_API_BASE_URL}Account/authenticate`;
-
+    const loginUrl = `${import.meta.env.VITE_API_BASE_URL}Account/authenticate`;
     const request = new Request(loginUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

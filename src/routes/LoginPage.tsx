@@ -6,6 +6,7 @@ import ErrorsMessages from '../components/ErrorsMessages';
 import AuthLayout from './AuthLayout';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import AppSpinner from '../components/AppSpinner';
 
 function LoginPage() {
   const [formValues, setFormValues] = useState({
@@ -14,6 +15,8 @@ function LoginPage() {
     rememberMe: false,
     messages: ['']
   }); 
+
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -22,15 +25,21 @@ function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const result = await login(formValues.email, formValues.password, formValues.rememberMe);
-    if (result.succeeded) {
-      navigate(state?.path || "/");
-    } else {
-      setFormValues({
-        ...formValues,
-        messages: result.messages
+    setLoading(true);
+
+    login(formValues.email, formValues.password, formValues.rememberMe)
+      .then(result => {
+        setLoading(false);
+        
+        if (result.succeeded) {
+          navigate(state?.path || "/");
+        } else {
+          setFormValues({
+            ...formValues,
+            messages: result.messages
+          });
+        }
       });
-    }
   }
 
   return (
@@ -93,6 +102,7 @@ function LoginPage() {
           {t('dont_have_account')} <Link className="fw-semibold text-decoration-none" to={'/register'}>{t('please_register')}</Link>
         </p>
       </div>
+      <AppSpinner show={loading} />
     </AuthLayout>
   )
 }
