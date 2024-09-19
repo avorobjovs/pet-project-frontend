@@ -15,7 +15,7 @@ function App() {
         <Route path={setPath('/login')} element={<LoginPage />} />
         <Route path={setPath('/register')} element={<RegisterPage />} />
         <Route
-          path={setPath('/*')}
+          path='/*'
           element={
             <ProtectedRoutes>
               <Route path={setPath('/')} element={<PageLayout />}>
