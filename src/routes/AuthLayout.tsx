@@ -9,8 +9,6 @@ function AuthLayout({ children }: { children: React.ReactNode }) {
           <Navbar.Brand>Pet Project</Navbar.Brand>
         </Container>
       </Navbar>
-      <div>Vite is running in {import.meta.env.MODE}</div>
-      <div>Vite BASE_URL: {import.meta.env.BASE_URL}</div>
       <div className="container my-5">
         {children}
       </div>
