@@ -10,8 +10,8 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
     }
   } else {
     return {
-      plugins: [react()]
-      base: '/development/'
+      plugins: [react()],
+      base: '/development-test/'
     }
   }
 })
