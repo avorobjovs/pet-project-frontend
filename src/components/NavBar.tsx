@@ -2,6 +2,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { LinkContainer } from 'react-router-bootstrap'
+import { setPath } from '../utils/navigationUtils';
 
 function NavBar() {
   return (
@@ -11,10 +12,10 @@ function NavBar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <LinkContainer to="/">
+            <LinkContainer to={setPath('/')}>
               <Nav.Link>Home</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/about">
+            <LinkContainer to={setPath('/about')}>
               <Nav.Link >About</Nav.Link>
             </LinkContainer>
           </Nav>

@@ -6,20 +6,21 @@ import RegisterPage from './routes/RegisterPage'
 import PageLayout from './routes/PageLayout'
 import AboutPage from './routes/AboutPage'
 import HomePage from './routes/HomePage'
+import { setPath } from './utils/navigationUtils'
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path={setPath('/login')} element={<LoginPage />} />
+        <Route path={setPath('/register')} element={<RegisterPage />} />
         <Route
-          path="/*"
+          path={setPath('/*')}
           element={
             <ProtectedRoutes>
-              <Route path="/" element={<PageLayout />}>
+              <Route path={setPath('/')} element={<PageLayout />}>
                 <Route index element={<HomePage />} />
-                <Route path="/about" element={<AboutPage />} />
+                <Route path={setPath('/about')} element={<AboutPage />} />
               </Route>
             </ProtectedRoutes>
           }

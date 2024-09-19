@@ -7,6 +7,7 @@ import AuthLayout from './AuthLayout';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import AppSpinner from '../components/AppSpinner';
+import { setPath } from '../utils/navigationUtils';
 
 function RegisterPage() {
   const [formValues, setFormValues] = useState({
@@ -159,7 +160,7 @@ function RegisterPage() {
         <ErrorsMessages messages={formResult.messages} />
 
         <p className="mt-4 text-body-secondary text-center">
-          {t('already_have_account')} <Link className="fw-semibold text-decoration-none" to={'/login'}>{t('please_login')}</Link>
+          {t('already_have_account')} <Link className="fw-semibold text-decoration-none" to={setPath('/login')}>{t('please_login')}</Link>
         </p>
       </div>
       <AppSpinner show={loading} />

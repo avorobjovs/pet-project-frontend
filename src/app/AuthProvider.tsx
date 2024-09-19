@@ -1,7 +1,7 @@
 import { createContext, useContext, useMemo, useState } from "react";
 import { useCookies } from 'react-cookie';
 import { jwtDecode } from "jwt-decode";
-import { executeFetch } from "./networkUtils";
+import { executeFetch } from "../utils/networkUtils";
 
 interface IUser {
   id: string;
