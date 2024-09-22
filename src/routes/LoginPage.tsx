@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { useAuth } from "../app/AuthProvider";
-import ErrorsMessages from '../components/ErrorsMessages';
+import ErrorsAlert from '../components/ErrorsAlert';
 import AuthLayout from './AuthLayout';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -45,6 +45,8 @@ function LoginPage() {
 
   return (
     <AuthLayout>
+      <ErrorsAlert messages={formValues.messages} />
+
       <div className="auth-form w-100 m-auto">
         <h3 className='mb-3'>{t('login_to_account')}</h3>
 
@@ -96,8 +98,6 @@ function LoginPage() {
 
           <Button variant="primary" type="submit" className="w-100 py-2">{t('login')}</Button>
         </Form>
-
-        <ErrorsMessages messages={formValues.messages} />
 
         <p className="mt-4 text-body-secondary text-center">
           {t('dont_have_account')} <Link className="fw-semibold text-decoration-none" to={setPath('/register')}>{t('please_register')}</Link>
