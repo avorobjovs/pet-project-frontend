@@ -1,3 +1,5 @@
+import { replaceAll } from "./stringUtils";
+
 interface IFetchResult {
   succeeded: boolean;
   data: any;
@@ -28,17 +30,17 @@ export async function executeFetch(request: Request): Promise<IFetchResult> {
       }
       else {
         if (responseBody.message) {
-          result.messages.push(responseBody.message);
+          result.messages.push(replaceAll(responseBody.message, '\n', ' '));
         }
 
         if (responseBody.title) {
-          result.messages.push(responseBody.title);
+          result.messages.push(replaceAll(responseBody.title, '\n', ' '));
         }
 
         if (responseBody.errors) {
           if (Array.isArray(responseBody.errors)) {
             responseBody.errors.forEach((error: string) => {
-              result.messages.push(error);
+              result.messages.push(replaceAll(error, '\n', ' '));
             });
           }
 
@@ -46,7 +48,7 @@ export async function executeFetch(request: Request): Promise<IFetchResult> {
             Object.keys(responseBody.errors).forEach(key => {
               const errorStrings: string[] = responseBody.errors[key];
               errorStrings.forEach(errorString => {
-                result.messages.push(`${key}: ${errorString}`);
+                result.messages.push(`${key}: ${replaceAll(errorString, '\n', ' ')}`);
               });
             });
           }

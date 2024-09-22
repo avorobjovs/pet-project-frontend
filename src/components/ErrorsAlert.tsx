@@ -1,8 +1,10 @@
-const ErrorsMessages = ({ messages }: { messages: string[] }) => {
+import Alert from "react-bootstrap/Alert";
+
+const ErrorsAlert = ({ messages }: { messages: string[] }) => {
   return (
     <>
-      {messages && messages.length > 0 && (
-        <p className="error">
+      {messages && messages.length > 0 && messages[0] && (
+        <Alert variant='danger'>
           {messages[0]}
           {messages.length > 1 && (
             <ul>
@@ -15,10 +17,10 @@ const ErrorsMessages = ({ messages }: { messages: string[] }) => {
               })}
             </ul>
           )}
-        </p>
+        </Alert>
       )}
     </>
   );
 }
 
-export default ErrorsMessages;
+export default ErrorsAlert;
